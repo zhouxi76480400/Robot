@@ -4,7 +4,7 @@ import socket
 import time
 
 send_to_address = '172.16.10.157'
-send_to_port = '50001'
+send_to_port = 50001
 
 ts = ev3.TouchSensor('in1')
 
@@ -67,13 +67,14 @@ try:
         if value_usr < 300:
             left()
             time.sleep(1)
-    # send data to pc
+        # send data to pc
         now_time = time.time()
         if now_time - now_fresh_time >= 1:
-            print("aaaa")
+            out_socket.sendto("{log,{0},{1},{2}}".format(value_usl, value_usc, value_usr).encode("utf-8"),
+                              (send_to_address, send_to_port))
             now_fresh_time = now_time
-            
+
 except KeyboardInterrupt:
     stop()
-    
+
 stop()
